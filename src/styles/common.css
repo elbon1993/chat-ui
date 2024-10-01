@@ -1,0 +1,6 @@
+.bottom-msg {
+    width: 90%;
+    position: absolute;
+    bottom: 100px;
+    text-align: center;
+}
