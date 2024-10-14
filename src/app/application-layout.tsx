@@ -114,6 +114,14 @@ const ApplicationLayout = ({
                                 <InboxIcon />
                                 <SidebarLabel>Inbox</SidebarLabel>
                             </SidebarItem>
+                            <SidebarItem href="/chat" current={pathname.startsWith('/chat')}>
+                                <InboxIcon />
+                                <SidebarLabel>Chat</SidebarLabel>
+                            </SidebarItem>
+                            <SidebarItem href="/group-chat" current={pathname.startsWith('/group-chat')}>
+                                <InboxIcon />
+                                <SidebarLabel>Group Chat</SidebarLabel>
+                            </SidebarItem>
                             <SidebarItem href="/spaces" current={pathname.startsWith('/spaces')}>
                                 <SquaresPlusIcon />
                                 <SidebarLabel>Spaces</SidebarLabel>

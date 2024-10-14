@@ -13,7 +13,7 @@ const Chat = () => {
     const [stompClient, setStompClient] = useState(null);
 
     useEffect(() => {
-        const socket = new SockJS('http://192.168.0.117:8080/chat');
+        const socket = new SockJS('http://localhost:8080/chat');
         const stompClient = Stomp.over(socket);
 
         stompClient.connect({}, (frame) => {
