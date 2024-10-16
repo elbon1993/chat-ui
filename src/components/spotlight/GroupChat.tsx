@@ -3,9 +3,10 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { Input } from '../catalyst/input';
 import { Button } from '../catalyst/button';
+import { error } from 'console';
 
 const GroupChat = () => {
-    const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
     const [roomId, setRoomId] = useState(''); // Example room ID
@@ -36,7 +37,7 @@ const GroupChat = () => {
         };
     }, [roomId]);
 
-    const sendMessage = (event) => {
+    const sendMessage = (event: { preventDefault: () => void; }) => {
         event.preventDefault();
         if (!isConnected) {
             console.error('WebSocket is not connected.');
@@ -45,17 +46,27 @@ const GroupChat = () => {
 
         const chatMessage = { sender: localStorage.getItem('username'), content: newMessage, roomId };
         clientRef.current?.publish({
-            destination: '/sendMessage',
+            destination: `/sendMessage/${roomId}`,
             body: JSON.stringify(chatMessage),
         });
         setNewMessage('');
     };
 
+    const getRoomMessages = (roomId: string) => {
+        if(roomId) {
+            fetch(`http://localhost:8080/getMessages/${roomId}`).then(res => res.json())
+            .then(data => setMessages(data))
+            .catch(error => console.error(error));
+        }
+    }
+
     return (
         <div>
             <br />
             <div>
-                <Input type="text" value= {roomId} onChange={e => setRoomId(e.target.value)} placeholder='Type GroupId' />
+                <Input type="text" value= {roomId} onChange={e => {
+                    setRoomId(e.target.value);
+                    getRoomMessages(e.target.value)} } placeholder='Type GroupId' />
             </div>
             <br />
             <form onSubmit={sendMessage}>
@@ -83,3 +94,9 @@ const GroupChat = () => {
 };
 
 export default GroupChat;
+
+interface ChatMessage {
+    sender: string;
+    content: string;
+    roomId: string;
+}

@@ -1,11 +1,9 @@
-import VideoChat from '@/components/spotlight/VideoChat'
 import React from 'react'
 
 const SpacesPage = () => {
   return (
     <div>
-      <h2>Video Chat</h2>
-      <VideoChat />
+      <h2>SpacesPage</h2>
     </div>
   )
 }
