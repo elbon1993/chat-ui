@@ -7,6 +7,7 @@ import { error } from 'console';
 
 const GroupChat = () => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [mongoMessages, setMongoMessages] = useState<ChatMessage[]>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isConnected, setIsConnected] = useState(false);
     const [roomId, setRoomId] = useState(''); // Example room ID
@@ -57,6 +58,10 @@ const GroupChat = () => {
             fetch(`http://localhost:8080/getMessages/${roomId}`).then(res => res.json())
             .then(data => setMessages(data))
             .catch(error => console.error(error));
+
+            fetch(`http://localhost:8080/getMessagesMongo/${roomId}`).then(res => res.json())
+            .then(data => setMongoMessages(data))
+            .catch(error => console.error(error));
         }
     }
 
@@ -83,6 +88,16 @@ const GroupChat = () => {
             <div>
                 {
                     messages.map((msg, index) => (
+                    localStorage.getItem('username') == msg.sender
+                    ? <div key={index} className='p-2'><strong>{msg.sender}:</strong> {msg.content}</div>
+                    : <div key={index} className='text-right p-2'><strong>{msg.sender}:</strong> {msg.content}</div>
+
+                ))}
+            </div>
+                <h2>Messages from Mongo</h2>
+            <div>
+                {
+                    mongoMessages.map((msg, index) => (
                     localStorage.getItem('username') == msg.sender
                     ? <div key={index} className='p-2'><strong>{msg.sender}:</strong> {msg.content}</div>
                     : <div key={index} className='text-right p-2'><strong>{msg.sender}:</strong> {msg.content}</div>
